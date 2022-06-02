@@ -1,129 +1,123 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
 
-# C extensions
-*.so
+import pandas as pd
+from scipy import stats
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+data=pd.read_csv(R'C:\Users\tp\Downloads\weather_data_24hr.csv\weather_data_24hr.csv')
+col=data.columns
+print(data.head(10))
+des=data.describe(include='all')
+print(data.tail(10))
+print(data.info())
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+missing=data.isna().sum()
+data=data.drop(['loc_id', 'maxtempF', 'mintempF', 'avgtempF', 'totalprecipMM', 'totalprecipIn', 'windspeedMiles', 'sunhour', 'winddir16point', 'weatherCode', 'weatherIconUrl','weatherDesc', 'visibilityMiles', 'pressureInches', 'cloudcover', 'HeatIndexC', 'HeatIndexF', 'DewPointC', 'DewPointF', 'WindChillF', 'WindGustMiles', 'WindGustKmph', 'FeelsLikeF', 'uvIndex', 'sunrise','sunset',  'moonrise','moonset', 'moon_phase', 'moon_illumination'], axis=1)
+import datetime
+date1=data['date']
+for i in range(0, len(date1)):
+    
+    datem = datetime. datetime.strptime(date1[i], "%Y-%m-%d")
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+    data["date"]=datem.month
+    
+    
+Q1 = data['mintempC'].quantile(0.25)
+Q3 = data['mintempC'].quantile(0.75)
+IQR = Q3 - Q1
+print(IQR)
+below_the_min=(data['mintempC'] < (Q1 - 1.5 * IQR)).sum()
+above_the_max=(data['mintempC']> (Q3 + 1.5 * IQR)).sum()   
+newdata=data[~((data['mintempC'] < (Q1 - 1.5 * IQR)) |(data['mintempC'] > (Q3 + 1.5 * IQR)))]
+null=newdata.isna().sum()
+plt.title('Boxplot')
+plt.xlabel('x_axis')
+plt.xlabel('y_axis')
+plt.boxplot(data['mintempC'],vert=True)
+plt.show() 
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
 
-# Translations
-*.mo
-*.pot
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+    
+Q5 = data['windspeedKmph'].quantile(0.25)
+Q7 = data['windspeedKmph'].quantile(0.75)
+IQR2 = Q7 - Q5
+print(IQR2)
+below_the_min=(data['windspeedKmph'] < (Q5 - 1.5 * IQR2)).sum()
+above_the_max=(data['windspeedKmph']> (Q7 + 1.5 * IQR2)).sum()   
+newdata1=newdata[~((newdata['windspeedKmph'] < (Q5 - 1.5 * IQR2)) |(newdata['windspeedKmph'] > (Q7 + 1.5 * IQR2)))]
+null=newdata1.isna().sum()
+plt.title('Boxplot')
+plt.xlabel('x_axis')
+plt.xlabel('y_axis')
+plt.boxplot(data['windspeedKmph'],vert=True)
+plt.show() 
 
-# Flask stuff:
-instance/
-.webassets-cache
 
-# Scrapy stuff:
-.scrapy
 
-# Sphinx documentation
-docs/_build/
 
-# PyBuilder
-target/
+Q9 = data['winddirdegree'].quantile(0.25)
+Q11 = data['winddirdegree'].quantile(0.75)
+IQR3 = Q11 - Q9
+print(IQR3)
+below_the_min=(data['winddirdegree'] < (Q9 - 1.5 * IQR3)).sum()
+above_the_max=(data['winddirdegree']> (Q11 + 1.5 * IQR3)).sum()   
+data=newdata1[~((newdata1['winddirdegree'] < (Q9 - 1.5 * IQR3)) |(newdata1['winddirdegree'] > (Q11 + 1.5 * IQR3)))]
+null=data.isna().sum()
+plt.title('Boxplot')
+plt.xlabel('x_axis')
+plt.xlabel('y_axis')
+plt.boxplot(data['winddirdegree'],vert=True)
+plt.show() 
 
-# Jupyter Notebook
-.ipynb_checkpoints
 
-# IPython
-profile_default/
-ipython_config.py
+Q13 = data['humidity'].quantile(0.25)
+Q15 = data['humidity'].quantile(0.75)
+IQR4 = Q15 - Q13
+print(IQR4)
+below_the_min=(data['humidity'] < (Q13 - 1.5 * IQR4)).sum()
+above_the_max=(data['humidity']> (Q15 + 1.5 * IQR4)).sum()   
+newdata=data[~((data['humidity'] < (Q13 - 1.5 * IQR4)) |(data['humidity'] > (Q15 + 1.5 * IQR4)))]
+null=newdata.isna().sum()
+plt.title('Boxplot')
+plt.xlabel('x_axis')
+plt.xlabel('y_axis')
+plt.boxplot(data['humidity'],vert=True)
+plt.show() 
 
-# pyenv
-.python-version
+newdata=newdata.drop('visibilityKm',axis=1)
+Q17 = data['pressureMB'].quantile(0.25)
+Q19 = data['pressureMB'].quantile(0.75)
+IQR5 = Q19 - Q17
+print(IQR4)
+below_the_min=(data['pressureMB'] < (Q17 - 1.5 * IQR5)).sum()
+above_the_max=(data['pressureMB']> (Q19 + 1.5 * IQR5)).sum()   
+data=newdata[~((newdata['pressureMB'] < (Q17 - 1.5 * IQR5)) |(newdata['pressureMB'] > (Q19 + 1.5 * IQR5)))]
+null=newdata.isna().sum()
+plt.title('Boxplot')
+plt.xlabel('x_axis')
+plt.xlabel('y_axis')
+plt.boxplot(data['pressureMB'],vert=False)
+plt.show() 
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
+data=(data- data.mean()) / data.mean()
+data.plot.scatter(x="avgtempC", y="mintempC", alpha=0.1 ) 
+min_corr=data.min().abs()
+max_corr=data.max()
+for i in range(0,len(min_corr)):
+    if min_corr[i]<0.02:
+        data.drop(min_corr.index[i],axis=1,inplace=True)
+sns.pairplot(data)
+x=data.drop('avgtempC',axis=1)
+y=data['avgtempC']
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.30)
+from sklearn.linear_model import LinearRegression
+reg=LinearRegression(fit_intercept=(True))
+reg.fit(x_train,y_train)
+y_predict=reg.predict(x_test)
+plt.scatter(x=y_test, y=y_predict, c='r')
+print(reg.predict([[0.241,0.389,0.11,0.29,0.064,0.30,0.345]]))        
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
